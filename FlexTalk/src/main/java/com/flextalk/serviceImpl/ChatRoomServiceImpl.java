@@ -1,6 +1,7 @@
 package com.flextalk.serviceImpl;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import com.flextalk.room.ChatRoom;
 import com.flextalk.room.ChatRoomFactory;
 import com.flextalk.room.ChatRoomHolder;
 import com.flextalk.service.ChatRoomService;
+import com.flextalk.util.ExceptionUtil;
 import com.flextalk.util.RetryCaller;
 
 @Service
@@ -30,6 +32,8 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 		//ChatRoom 蒲配府 按眉 积己
 		ChatRoomFactory factory = roomHolder.createFactory();
 		ChatRoom room = factory.createRoom(chatroomType, userKey, chatroomName);
+
+		ExceptionUtil.check(Objects.isNull(room), NotCreateRoomException.class);
 
 		//盲泼规 积己
 		chatRoomRepository.save(room);	

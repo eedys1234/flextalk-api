@@ -10,6 +10,7 @@ import com.flextalk.pattern.PatternChecker;
 import com.flextalk.repository.UserRepository;
 import com.flextalk.service.UserService;
 import com.flextalk.user.User;
+import com.flextalk.util.ExceptionUtil;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -20,6 +21,10 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public int login(String userId, String userPw) {
 		
+		ExceptionUtil.check("".equals(userId), InValidUserIdException.class);
+		
+		ExceptionUtil.check("".equals(userPw), InValidUserPwException.class);
+
 		userRepository.login(new User(userId, userPw));
 		return 0;
 	}
@@ -29,15 +34,10 @@ public class UserServiceImpl implements UserService {
 		
 		PatternChecker patternChecker = new PatternChecker();
 		
-		if(!patternChecker.valid(RegExp.ID_REGEXP, userId)) {
-			throw new InValidUserIdException();
-		}
+		ExceptionUtil.check(!patternChecker.valid(RegExp.ID_REGEXP, userId), InValidUserIdException.class);
+
+		ExceptionUtil.check(!patternChecker.valid(RegExp.PW_REGEXP, userPw), InValidUserPwException.class);
 		
-		if(!patternChecker.valid(RegExp.PW_REGEXP, userPw)) {
-			throw new InValidUserPwException();
-		}
-		
-		//생성 로직 추가
 		userRepository.enroll(new User(userId, userPw));
 
 		return 1;
