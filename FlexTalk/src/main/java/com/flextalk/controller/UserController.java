@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.flextalk.constants.ResCodes;
 import com.flextalk.dto.UserVO;
 import com.flextalk.service.UserService;
 import com.flextalk.util.ApiResponse;
@@ -22,17 +23,20 @@ public class UserController {
 	
 	@PostMapping(value = "/login")
 	public ResponseEntity<ApiResponse> login(
-			@RequestBody UserVO.loginRequest request) {
+			@RequestBody UserVO.loginRequest request) {		
+		int result = userService.login(request.getUserId(), request.getUserPw());
 		
-		userService.login(request.getUserId(), request.getUserPw());
-		return new ResponseEntity<>(null, HttpStatus.OK);
+		return new ResponseEntity<ApiResponse>(
+				ApiResponse.of(ResCodes.OK, new UserVO.loginResponse(result)), HttpStatus.OK);
 	}
 	
 	@PostMapping(value = "/enrollment")
 	public ResponseEntity<ApiResponse> enroll(
 			@RequestBody UserVO.enrollmentRequest request) {
 		
-		userService.enroll(request.getUserId(), request.getUserPw());
-		return new ResponseEntity<>(null, HttpStatus.CREATED);
+		int result = userService.enroll(request.getUserId(), request.getUserPw());
+		
+		return new ResponseEntity<>(
+				ApiResponse.of(ResCodes.OK, new UserVO.enrollmentResponse(result)), HttpStatus.CREATED);
 	}
 }

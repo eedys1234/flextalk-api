@@ -1,15 +1,10 @@
 package com.flextalk.repository;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+
 import com.flextalk.user.User;
 
-public class UserRepository {
-
-	public int enroll(User user) {
-		return 0;
-		
-	}
+public interface UserRepository extends JpaRepository<User, Long>{
 	
-	public int login(User user) {
-		return 0;
-	}
+	public int findByUserIdAndUserPw(String userId, String userPw);
 }

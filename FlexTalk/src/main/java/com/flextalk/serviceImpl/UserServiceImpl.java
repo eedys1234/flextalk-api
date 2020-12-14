@@ -1,5 +1,7 @@
 package com.flextalk.serviceImpl;
 
+import java.util.Objects;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,8 +27,7 @@ public class UserServiceImpl implements UserService {
 		
 		ExceptionUtil.check("".equals(userPw), InValidUserPwException.class);
 
-		userRepository.login(new User(userId, userPw));
-		return 0;
+		return userRepository.findByUserIdAndUserPw(userId, userPw);		
 	}
 
 	@Override
@@ -38,9 +39,9 @@ public class UserServiceImpl implements UserService {
 
 		ExceptionUtil.check(!patternChecker.valid(RegExp.PW_REGEXP, userPw), InValidUserPwException.class);
 		
-		userRepository.enroll(new User(userId, userPw));
-
-		return 1;
+		User user = userRepository.save(new User(userId, userPw));
+		
+		return !Objects.isNull(user)?1:0;
 	}
 
 }

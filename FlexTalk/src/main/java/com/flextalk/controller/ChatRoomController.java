@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.flextalk.constants.ResCodes;
 import com.flextalk.constants.XHeader;
 import com.flextalk.dto.ChatRoomVO;
 import com.flextalk.service.ChatRoomService;
@@ -40,8 +41,9 @@ public class ChatRoomController {
 			@RequestHeader(XHeader.X_USER_ID) long userKey,
 			@RequestBody ChatRoomVO.createReqeust request) {
 		
-		chatRoomService.create(userKey, request.getChatroomType(), request.getChatroomName());
-		return new ResponseEntity<>(null, HttpStatus.CREATED);
+		ChatRoomVO.createResponse response = chatRoomService.create(userKey, request.getChatroom_type(), request.getChatroom_name());
+		return new ResponseEntity<>(
+				ApiResponse.of(ResCodes.OK, response), HttpStatus.CREATED);
 	}
 	
 	@GetMapping(value = "/rooms")

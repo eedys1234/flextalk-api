@@ -1,6 +1,8 @@
 package com.flextalk.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -16,8 +18,13 @@ public class UserVO {
 		
 	}
 	
+	@Getter
+	@Setter
+	@ToString
+	@AllArgsConstructor
+	@NoArgsConstructor
 	public static class loginResponse {
-		
+		private int loginYN;
 	}
 	
 	@Getter
@@ -29,8 +36,13 @@ public class UserVO {
 		private String userPw;
 		
 	}
-	
+
+	@Getter
+	@Setter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	@ToString
 	public static class enrollmentResponse {
-		
+		private int enrollYN;
 	}
 }

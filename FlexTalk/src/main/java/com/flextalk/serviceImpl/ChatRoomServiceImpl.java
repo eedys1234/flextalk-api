@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.flextalk.dto.ChatRoomVO;
 import com.flextalk.exception.NotCreateRoomException;
 import com.flextalk.repository.ChatRoomRepository;
 import com.flextalk.room.ChatRoom;
@@ -27,7 +28,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 	
 	@Override
 	@Transactional
-	public int create(long userKey, String chatroomType, String chatroomName) {
+	public ChatRoomVO.createResponse create(long userKey, String chatroomType, String chatroomName) {
 		
 		//ChatRoom 蒲配府 按眉 积己
 		ChatRoomFactory factory = roomHolder.createFactory();
@@ -36,17 +37,18 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 		ExceptionUtil.check(Objects.isNull(room), NotCreateRoomException.class);
 
 		//盲泼规 积己
-		chatRoomRepository.save(room);	
-		
+		ChatRoom savedRoom = chatRoomRepository.save(room);	
+		ChatRoomVO.createResponse response = new ChatRoomVO.createResponse(savedRoom.getChatroomKey());
+				
 		//曼咯磊 积己
-		return 1;		
+		return response;		
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<ChatRoom> findAllRoom(String userId) {
+	public List<ChatRoom> findAllRoom(long userKey) {
 		
-		List<ChatRoom> listRoom = chatRoomRepository.findAllRoom(userId);
+		List<ChatRoom> listRoom = chatRoomRepository.findAllRoom(userKey);
 		return listRoom;
 	}
 
@@ -55,9 +57,9 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 	public int remove(long userKey, long chatroomKey) {
 		
 		//Valid checking
+		chatRoomRepository.delete(chatroomKey);
+		return 0;
 		
-		
-		return chatRoomRepository.remove(chatroomKey);
 	}
 
 }
