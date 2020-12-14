@@ -1,8 +1,10 @@
 package com.flextalk.exception;
 
+import com.flextalk.constants.ResCodes;
+
 public class DuplicationEmailException extends RuntimeException {
 
 	public DuplicationEmailException() {
-		super("중복된 Email이 존재합니다.");
+		super(ResCodes.DUPLICATION_INPUT_VALUE.getMessage());
 	}
 }

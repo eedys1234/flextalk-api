@@ -1,6 +1,8 @@
 package com.flextalk.room;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -14,15 +16,14 @@ import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.flextalk.message.Message;
 import com.flextalk.user.Participant;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
 @Getter
 @ToString(exclude = "participants")
-@EqualsAndHashCode(exclude = "participants")
 @MappedSuperclass
 public abstract class ChatRoom {
 	
@@ -58,14 +59,17 @@ public abstract class ChatRoom {
 	@Temporal(TemporalType.TIMESTAMP)
 	protected Date regDate;
 	
-	@OneToMany(mappedBy = "room", fetch = FetchType.EAGER, cascade = {
+	@OneToMany(mappedBy = "room", fetch = FetchType.LAZY, cascade = {
 			CascadeType.PERSIST, 
 			CascadeType.REMOVE, 
-	})
+	})	
 	protected Set<Participant> participants;
 	
+	@OneToMany(mappedBy = "room", fetch = FetchType.LAZY)
+	protected List<Message> message = new ArrayList<Message>();
+	
 	public abstract boolean isVisit(Set<Participant> participants);
-		
+	
 	public boolean removeParticipant(Participant participant) {
 
 		if(participants.size() > 1) {

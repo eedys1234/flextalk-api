@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public int enroll(String userId, String userPw) {
+	public int enroll(String userId, String userPw, String userEmail) {
 		
 		PatternChecker patternChecker = new PatternChecker();
 		
@@ -39,9 +39,19 @@ public class UserServiceImpl implements UserService {
 
 		ExceptionUtil.check(!patternChecker.valid(RegExp.PW_REGEXP, userPw), InValidUserPwException.class);
 		
-		User user = userRepository.save(new User(userId, userPw));
+		User user = userRepository.save(new User(userId, userPw, userEmail));
 		
 		return !Objects.isNull(user)?1:0;
+	}
+
+	@Override
+	public String findUserId(String userEmail) {
+		return null;
+	}
+
+	@Override
+	public int findUserPw(String userId, String userEmail) {
+		return 0;
 	}
 
 }

@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -19,10 +20,12 @@ import javax.persistence.TemporalType;
 import com.flextalk.room.ChatRoom;
 
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
 @Entity
 @Table(name = "tb_FT_ChatRoom")
+@ToString(exclude = {"user", "room"})
 public class Participant {
 	
 	@Id
@@ -30,11 +33,11 @@ public class Participant {
 	@Column(name = "participant_key")
 	private Long participantKey;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_key")
 	private User user;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "room_key")
 	private ChatRoom room;
 	
@@ -112,7 +115,6 @@ public class Participant {
 
 	private Participant(ChatRoom room) {
 		this.room = Objects.requireNonNull(room);
-//		this.user = Objects.requireNonNull(user);
 		this.isMaster = MasterType.UNCHECK;
 		this.isAlaram = AlaramType.UNCHECK;
 		this.isBookmark = BookmarkType.UNCHECK;

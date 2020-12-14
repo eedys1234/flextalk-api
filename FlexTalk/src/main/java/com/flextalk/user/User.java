@@ -23,7 +23,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @NoArgsConstructor
-//@EqualsAndHashCode(exclude = "participants")
 @Table(name = "tb_FT_User")
 public class User {
 
@@ -44,12 +43,12 @@ public class User {
 	@Enumerated(EnumType.STRING)
 	private UserType userType;
 
+	@Column(name = "user_email")
+	private String userEmail;
+	
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date regDate;
-	
-	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-	private Set<Participant> participants;
-	
+		
 	public enum UserType {
 		FLEXTALK_ID("0"),
 		SNS_ID("1");
@@ -69,9 +68,10 @@ public class User {
 		}
 	}
 	
-	public User(String userId, String userPw) {
+	public User(String userId, String userPw, String userEmail) {
 		this.userId = userId;
 		this.userPw = userPw;
+		this.userEmail = userEmail;
 		this.userType = UserType.FLEXTALK_ID;
 		this.regDate = new Date();
 	}

@@ -46,10 +46,11 @@ public class ChatRoomController {
 				ApiResponse.of(ResCodes.OK, response), HttpStatus.CREATED);
 	}
 	
-	@GetMapping(value = "/rooms")
-	public ResponseEntity<ApiResponse> findAllRoom() {
+	@GetMapping(value = "/rooms/{userKey}")
+	public ResponseEntity<ApiResponse> findAllRoom(
+			@PathVariable("userKey") long userKey) {
 		
-		
+		chatRoomService.findAllRoom(userKey);
 		return new ResponseEntity<>(null, HttpStatus.OK);
 	}
 	

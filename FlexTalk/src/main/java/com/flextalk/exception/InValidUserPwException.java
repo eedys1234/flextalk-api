@@ -1,9 +1,11 @@
 package com.flextalk.exception;
 
+import com.flextalk.constants.ResCodes;
+
 public class InValidUserPwException extends RuntimeException {
 	
 	public InValidUserPwException() {
-		super("비밀번호 형식이 옳바르지 않습니다.");
+		super(ResCodes.INVALID_INPUT_VALUE.getMessage());
 	}
 
 }

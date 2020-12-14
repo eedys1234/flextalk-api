@@ -34,6 +34,7 @@ public class UserVO {
 		
 		private String userId;
 		private String userPw;
+		private String userEmail;
 		
 	}
 
@@ -44,5 +45,23 @@ public class UserVO {
 	@ToString
 	public static class enrollmentResponse {
 		private int enrollYN;
+	}
+	
+	@Getter
+	@Setter
+	@ToString
+	public static class findRequest {
+		
+		private String userId;
+		private String userEmail;
+	}
+	
+	@Getter
+	@Setter
+	@ToString
+	public static class findResponse {
+		
+		private String userId;
+		private String userPwLink;
 	}
 }

@@ -29,8 +29,8 @@ public class GroupRoom extends ChatRoom {
 		this.chatroomName = Objects.requireNonNull(chatroomName);
 		this.participants = Objects.requireNonNull(participants);
 		userKey = Objects.requireNonNull(userKey);
-		
-		this.participants.add(Participant.of(this));
+
+		addParticipant(Participant.of(this));
 		this.regDate = new Date();
 	}
 	
@@ -41,6 +41,7 @@ public class GroupRoom extends ChatRoom {
 	public static GroupRoom of(Long userKey, String chatroomName, Set<Participant> participants) {
 		return new GroupRoom(userKey, chatroomName, participants);
 	}
+	
 
 	@Override
 	public boolean isVisit(Set<Participant> participants) {		

@@ -28,7 +28,7 @@ public class ChatRoomFactory {
 	private Optional<RoomType> filter(String chatroomType, Predicate<RoomType> predicate) {
 		
 		Function<String, Predicate<RoomType>> condition = roomtype -> predicate;
-		
+
 		return Arrays.stream(RoomType.class.getEnumConstants())
 				.filter(condition.apply(chatroomType))
 				.findFirst();
