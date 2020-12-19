@@ -1,8 +1,15 @@
 package com.flextalk.util;
 
 import com.flextalk.constants.ResCodes;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
+@NoArgsConstructor
+@Getter
+@Setter
 @ToString
 public class ApiResponse {
 

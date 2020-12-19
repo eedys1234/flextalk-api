@@ -17,14 +17,16 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.flextalk.exception.NotAddParticipantException;
 import com.flextalk.room.ChatRoom;
+import com.flextalk.util.ExceptionUtil;
 
 import lombok.Getter;
 import lombok.ToString;
 
 @Getter
 @Entity
-@Table(name = "tb_FT_ChatRoom")
+@Table(name = "tb_participant")
 @ToString(exclude = {"user", "room"})
 public class Participant {
 	
@@ -38,7 +40,7 @@ public class Participant {
 	private User user;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "room_key")
+	@JoinColumn(name = "chatroom_key")
 	private ChatRoom room;
 	
 	@Column(name = "is_bookmark", nullable = false, length = 1)
@@ -113,8 +115,11 @@ public class Participant {
         }
 	}
 
-	private Participant(ChatRoom room) {
-		this.room = Objects.requireNonNull(room);
+	private Participant(ChatRoom room, User user) {
+
+		ExceptionUtil.check(!addRoom(room), NotAddParticipantException.class);
+		
+		this.user = Objects.requireNonNull(user);
 		this.isMaster = MasterType.UNCHECK;
 		this.isAlaram = AlaramType.UNCHECK;
 		this.isBookmark = BookmarkType.UNCHECK;
@@ -124,8 +129,8 @@ public class Participant {
 		this.room.getParticipantList().add(this);
 	}
 	
-	public static Participant of(ChatRoom room) {
-		return new Participant(room);
+	public static Participant of(ChatRoom room, User user) {
+		return new Participant(room, user);
 	}
 
 	public void setupBookmark(BookmarkType isBookmark) {
@@ -138,6 +143,11 @@ public class Participant {
 
 	public void setupMaster(MasterType isMaster) {
 		this.isMaster = isMaster;
+	}
+	
+	public boolean addRoom(ChatRoom room) {
+		this.room = Objects.requireNonNull(room);
+		return room.addParticipant(this);
 	}
 
 	@Override

@@ -11,7 +11,7 @@ public class EnumUtil {
 		new AssertionError();
 	}
 	
-	public static <T, R> Optional<T> filter(Class<T> type, R input, Predicate<T> cases) {
+	public static <T, R> Optional<T> filterEnumType(Class<T> type, R input, Predicate<T> cases) {
 		
 		if(type.isEnum()) {
 			Function<R, Predicate<T>> condition = value -> cases;

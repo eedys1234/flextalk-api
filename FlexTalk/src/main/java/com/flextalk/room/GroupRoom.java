@@ -10,8 +10,8 @@ import javax.persistence.Table;
 
 import com.flextalk.user.Participant;
 
-@Entity
-@Table(name = "tb_FT_ChatRoom")
+//@Entity
+//@Table(name = "tb_ChatRoom")
 public class GroupRoom extends ChatRoom {
 //	https://www.logicbig.com/how-to/code-snippets/jcode-java-8-streams-collectors-toconcurrentmap.html
 //	Stream.concat(participants.stream(), addParticipants.stream())
@@ -24,24 +24,16 @@ public class GroupRoom extends ChatRoom {
 		this.chatroomType = RoomType.GROUP;
 	}
 	
-	private GroupRoom(Long userKey, String chatroomName, Set<Participant> participants) {
+	private GroupRoom(String chatroomName) {
 		this();
 		this.chatroomName = Objects.requireNonNull(chatroomName);
-		this.participants = Objects.requireNonNull(participants);
-		userKey = Objects.requireNonNull(userKey);
-
-		addParticipant(Participant.of(this));
 		this.regDate = new Date();
 	}
 	
-	public static GroupRoom of(Long userKey, String chatroomName) {
-		return new GroupRoom(userKey, chatroomName, Collections.emptySet());
+	public static GroupRoom of(String chatroomName) {
+		return new GroupRoom(chatroomName);
 	}
-	
-	public static GroupRoom of(Long userKey, String chatroomName, Set<Participant> participants) {
-		return new GroupRoom(userKey, chatroomName, participants);
-	}
-	
+		
 
 	@Override
 	public boolean isVisit(Set<Participant> participants) {		

@@ -1,11 +1,11 @@
 package com.flextalk.room;
-import java.util.Arrays;
 import java.util.Optional;
-import java.util.function.Function;
-import java.util.function.Predicate;
 
 import com.flextalk.exception.NotCreateRoomException;
 import com.flextalk.room.ChatRoom.RoomType;
+import com.flextalk.user.Participant;
+import com.flextalk.user.User;
+import com.flextalk.util.EnumUtil;
 
 public class ChatRoomFactory {
 	
@@ -16,32 +16,23 @@ public class ChatRoomFactory {
 	 * @param roomName
 	 * @return
 	 */
-	public ChatRoom createRoom(String chatroomType, long userKey, String roomName) {
+	public ChatRoom createRoom(String chatroomType, String roomName) {
 
-		Optional<RoomType> optional = filter(chatroomType, type -> type.getValue().equals(chatroomType));
+		Optional<RoomType> optional = EnumUtil.filterEnumType(RoomType.class, chatroomType, type -> type.getValue().equals(chatroomType));
 		
 		optional.orElseThrow(()-> new NotCreateRoomException());
 		
-		return getRoom(optional.get(), userKey, roomName);
+		return getRoom(optional.get(), roomName);
 	}
-	
-	private Optional<RoomType> filter(String chatroomType, Predicate<RoomType> predicate) {
 		
-		Function<String, Predicate<RoomType>> condition = roomtype -> predicate;
-
-		return Arrays.stream(RoomType.class.getEnumConstants())
-				.filter(condition.apply(chatroomType))
-				.findFirst();
-	}
-	
-	private ChatRoom getRoom(RoomType roomType, long userKey, String roomName) {
+	private ChatRoom getRoom(RoomType roomType, String roomName) {
 
 		switch(roomType) {
 			case PERSONAL : {
-				return PersonalRoom.of(userKey, roomName);
+				return PersonalRoom.of(roomName);
 			}
 			case GROUP : {
-				return GroupRoom.of(userKey, roomName);				
+				return GroupRoom.of(roomName);				
 			}
 			default : {
 				return null;

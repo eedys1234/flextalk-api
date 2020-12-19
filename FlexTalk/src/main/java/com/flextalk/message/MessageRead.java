@@ -19,7 +19,7 @@ import com.flextalk.user.User;
 import lombok.Getter;
 
 @Entity
-@Table(name = "tb_FT_MessageRead")
+@Table(name = "tb_Message_Read")
 @Getter
 public class MessageRead {
 
@@ -48,6 +48,8 @@ public class MessageRead {
 	public static MessageRead of(Message message, User user) {
 		return new MessageRead(message, user);
 	}
+	
+
 	
 	
 }

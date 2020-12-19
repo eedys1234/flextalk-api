@@ -28,6 +28,6 @@
  		</property>	
 	</bean>
 	
-	<jpa:repositories base-package="com.kakao.pay.repository" />
+	<jpa:repositories base-package="com.flextalk" />
 	
 </beans>

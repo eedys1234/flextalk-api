@@ -2,17 +2,22 @@ package com.flextalk.room;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -23,18 +28,18 @@ import lombok.Getter;
 import lombok.ToString;
 
 @Getter
-@ToString(exclude = "participants")
-@MappedSuperclass
+@Entity
+@Table(name = "tb_ChatRoom")
 public abstract class ChatRoom {
 	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	protected Long chatroomKey;
 	
 	@Column(name = "chatroom_name", nullable = false)
 	protected String chatroomName;
 	
 	@Column(name = "chatroom_type", nullable = false)
+	@Enumerated(EnumType.STRING)
 	protected RoomType chatroomType;
 	
 	protected enum RoomType {
@@ -63,7 +68,7 @@ public abstract class ChatRoom {
 			CascadeType.PERSIST, 
 			CascadeType.REMOVE, 
 	})	
-	protected Set<Participant> participants;
+	protected Set<Participant> participants = new HashSet<Participant>();
 	
 	@OneToMany(mappedBy = "room", fetch = FetchType.LAZY)
 	protected List<Message> message = new ArrayList<Message>();
@@ -77,7 +82,7 @@ public abstract class ChatRoom {
 		}
 		else {
 			//방 삭제 코드 
-			participants.clear();			
+//			participants.clear();			s
 			return false;
 		}
 	}

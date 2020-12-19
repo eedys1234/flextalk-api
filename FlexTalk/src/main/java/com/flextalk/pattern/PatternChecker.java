@@ -2,6 +2,9 @@ package com.flextalk.pattern;
 
 import java.util.regex.Matcher;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class PatternChecker {
 	
 	private PatternStore patternStore;

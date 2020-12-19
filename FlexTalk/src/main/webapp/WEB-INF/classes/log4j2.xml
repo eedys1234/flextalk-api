@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+	<Appenders>
+		<!-- 
+			콘솔 Appender 
+			name은 식별자
+		-->
+		<Console name="console" target="SYSTEM_OUT">
+			<!-- 
+				로그를 어떤형식으로 출력할 것인지 설정
+				%d : 이벤트발생날짜
+				%p : debug , info, warn, error 등의 priority
+				%m : 로그 내용 출력
+				%F : 로깅이 발생한 프로그램 파일명 출력
+				%M : 로깅이 발생한 method 이름
+				%L : 로깅이 발생한 caller 라인수
+				%c :package 출력
+				%n : 개행문자
+			 -->
+			<PatternLayout pattern="[%d{HH:mm:ss,SSS}-%-5p] %m (%F.%M():%L) [%c]%n"/>
+		</Console>
+		<!-- 
+			일정크기 이상일 시 새로운 파일 생성 
+			파일 Appender 
+			name은 식별자
+		-->
+		<RollingFile name="dailyRollingFileInfo" fileName="./logs/FlexTalk_Info/FlexTalk_Info.log" filePattern="./logs/FlexTalk_Info/FlexTalk_Info_%d{yyyy-MM-dd}.log">
+			<PatternLayout pattern="[%d{HH:mm:ss,SSS}-%-5p] %m (%F.%M():%L) [%c]%n"/>
+			<Policies>
+				<TimeBasedTriggeringPolicy />
+			</Policies>
+		</RollingFile>
+
+		<RollingFile name="dailyRollingFileError" fileName="./logs/FlexTalk_Error/FlexTalk_Error.log" filePattern="./logs/FlexTalk_Error/FlexTalk_Error_%d{yyyy-MM-dd}.log">
+			<PatternLayout pattern="[%d{HH:mm:ss,SSS}-%-5p] %m (%F.%M():%L) [%c]%n"/>
+			<Policies>
+				<TimeBasedTriggeringPolicy />
+			</Policies>
+		</RollingFile>
+
+	</Appenders>
+	
+	<Loggers>
+	    <Logger name="com.flextalk" level="DEBUG" additivity="false">
+	        <AppenderRef ref="console" />
+	        <AppenderRef ref="dailyRollingFileInfo" level="INFO" />
+	    </Logger>
+	    
+   	    <Logger name="com.flextalk" level="Error" additivity="false">
+	        <AppenderRef ref="console" />
+	        <AppenderRef ref="dailyRollingFileError" level="Error" />
+	    </Logger>
+	    
+	    <Logger name="java.sql" level="INFO" additivity="false">
+	        <AppenderRef ref="console" />
+	        <AppenderRef ref="dailyRollingFileInfo" />
+	    </Logger>
+	    
+	    <Logger name="jdbc.sqltiming" level="INFO" additivity="false">
+	        <AppenderRef ref="console" />
+	        <AppenderRef ref="dailyRollingFileInfo" />
+	    </Logger>
+	    
+	    <Logger name="org.springframework" level="INFO" additivity="false">
+	        <AppenderRef ref="console" />
+	        <AppenderRef ref="dailyRollingFileInfo" />
+	    </Logger>
+	    
+	    <Root level="ERROR">
+	        <AppenderRef ref="console" />
+	        <AppenderRef ref="dailyRollingFileInfo" />
+	    </Root>
+	    
+	</Loggers>
+</Configuration>

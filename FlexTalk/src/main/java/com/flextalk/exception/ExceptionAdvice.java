@@ -44,4 +44,10 @@ public class ExceptionAdvice {
 		return new ResponseEntity<ApiResponse>(ApiResponse.of(ResCodes.NOT_FORM_PW), HttpStatus.BAD_REQUEST);		
 	}
 
+	@ExceptionHandler(EmptyInputValueException.class)
+	public ResponseEntity<ApiResponse> handleEmptyInputValueException(EmptyInputValueException e) {
+		log.error("EmptyInputValueException", e.getMessage());
+		return new ResponseEntity<ApiResponse>(ApiResponse.of(ResCodes.INVALID_INPUT_VALUE), HttpStatus.BAD_REQUEST);		
+	}
+	
 }

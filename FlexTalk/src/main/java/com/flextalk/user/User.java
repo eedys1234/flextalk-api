@@ -17,13 +17,16 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Getter
+@Getter @Setter @NoArgsConstructor 
+@AllArgsConstructor @Builder 
 @Entity
-@NoArgsConstructor
-@Table(name = "tb_FT_User")
+@Table(name = "tb_User")
 public class User {
 
 	@Id
@@ -74,5 +77,6 @@ public class User {
 		this.userEmail = userEmail;
 		this.userType = UserType.FLEXTALK_ID;
 		this.regDate = new Date();
+		this.status = "0";
 	}
 }

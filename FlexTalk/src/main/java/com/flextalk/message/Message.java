@@ -28,7 +28,7 @@ import com.flextalk.util.EnumUtil;
 import lombok.Getter;
 
 @Entity
-@Table(name = "tb_FT_Message")
+@Table(name = "tb_Message")
 @Getter
 public class Message {
 	
@@ -121,17 +121,12 @@ public class Message {
 			
 	private MessageType getMessageType(String messageType) {
 		
-		Optional<MessageType> optional = EnumUtil.filter(MessageType.class, messageType, type->type.getValue().equals(messageType));
+		Optional<MessageType> optional = EnumUtil.filterEnumType(MessageType.class, messageType, type->type.getValue().equals(messageType));
 				
-		//예외 처리
 		optional.orElseThrow(() -> new RuntimeException());
 		
 		return optional.get();
 	}
+		 
 	
-	public void setMessageRead(MessageRead read) {
-		this.readList.add(read);		
-	}
-	 
-
 }
