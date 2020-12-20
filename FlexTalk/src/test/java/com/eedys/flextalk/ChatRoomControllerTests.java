@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flextalk.common.TestDescripter;
+import com.flextalk.constants.XHeader;
 import com.flextalk.exception.ExceptionAdvice;
 import com.flextalk.room.ChatRoom;
 import com.flextalk.room.ChatRoomController;
@@ -39,7 +40,6 @@ public class ChatRoomControllerTests {
 
 	protected MockMvc mockMvc;
 	
-	@Autowired
 	protected ObjectMapper objectMapper;
 	
 	@Autowired
@@ -56,6 +56,7 @@ public class ChatRoomControllerTests {
 	
 	@Before
 	public void setUp() {
+			objectMapper = new ObjectMapper();
 			MockitoAnnotations.initMocks(this);
 			this.mockMvc = MockMvcBuilders.standaloneSetup(chatRoomController)				   
 		    		  .setControllerAdvice(new ExceptionAdvice())
@@ -75,23 +76,23 @@ public class ChatRoomControllerTests {
 		assertNotNull(room);
 	}
 	
-//	@Test
-//	@TestDescripter("채팅방 생성 API 테스트")
-//	public void chatroom_created() throws Exception {
-//		
-//		ChatRoomVO.createReqeust chatroom = new ChatRoomVO.createReqeust();
-//		chatroom.setChatroom_name("테스트 채팅방1");
-//		chatroom.setChatroom_type("0");		
-//		
-//		mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/room")
-//				.contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-//				.accept(MediaType.APPLICATION_JSON_UTF8_VALUE)
-//				.content(objectMapper.writeValueAsString(chatroom))
-//				)
-//		.andDo(print())
-//		.andExpect(jsonPath("$.status").value(200));
-//		
-//	}
+	@Test
+	@TestDescripter("채팅방 생성 API 테스트")
+	public void ChatRoom_Created() throws Exception {
+		
+		ChatRoomVO.createReqeust chatroom = new ChatRoomVO.createReqeust();
+		chatroom.setChatroom_name("테스트 채팅방1");
+		chatroom.setChatroom_type("0");		
+		
+		mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/room")
+				.contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+				.accept(MediaType.APPLICATION_JSON_UTF8_VALUE)
+				.header(XHeader.X_USER_ID, 1)
+				.content(objectMapper.writeValueAsString(chatroom)))
+		.andDo(print())
+		.andExpect(jsonPath("$.status").value(200));
+		
+	}
 	
 	
 }

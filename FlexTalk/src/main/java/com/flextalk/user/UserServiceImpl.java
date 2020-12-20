@@ -17,7 +17,7 @@ public class UserServiceImpl implements UserService {
 	private UserRepository userRepository;
 	
 	@Override
-	public Long login(User user) {
+	public User login(User user) {
 		return userRepository.findByUserIdAndUserPw(user.getUserId(), user.getUserPw());		
 	}
 

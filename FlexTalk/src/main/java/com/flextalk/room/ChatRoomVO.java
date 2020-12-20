@@ -2,6 +2,8 @@ package com.flextalk.room;
 
 import java.util.List;
 
+import javax.validation.constraints.NotEmpty;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,7 +16,10 @@ public class ChatRoomVO {
 	@ToString
 	public static class createReqeust {
 
+		@NotEmpty
 		private String chatroom_name;
+
+		@NotEmpty
 		private String chatroom_type;		
 	}
 

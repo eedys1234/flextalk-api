@@ -29,6 +29,7 @@ public class UserVO {
 	@AllArgsConstructor
 	@NoArgsConstructor
 	public static class loginResponse {
+		private long userKey;
 		private long loginYN;
 	}
 	
@@ -46,6 +47,8 @@ public class UserVO {
 		@NotEmpty(message = "이메일은 필수입력 값입니다.")
 		private String userEmail;
 		
+		@NotEmpty
+		private String userType;
 	}
 
 	@Getter

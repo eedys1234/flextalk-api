@@ -122,10 +122,8 @@ public class Message {
 	private MessageType getMessageType(String messageType) {
 		
 		Optional<MessageType> optional = EnumUtil.filterEnumType(MessageType.class, messageType, type->type.getValue().equals(messageType));
-				
-		optional.orElseThrow(() -> new RuntimeException());
 		
-		return optional.get();
+		return optional.orElseThrow(() -> new IllegalArgumentException(String.format("Unsupported type for %s", messageType)));
 	}
 		 
 	

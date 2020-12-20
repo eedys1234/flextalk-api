@@ -1,12 +1,11 @@
-package com.flextalk.user;
+package com.flextalk.participant;
 
 import java.util.Date;
 import java.util.Objects;
 
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -17,8 +16,12 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.flextalk.common.BaseEnumCode;
+import com.flextalk.common.YNCode;
+import com.flextalk.common.YNCodeConverter;
 import com.flextalk.exception.NotAddParticipantException;
 import com.flextalk.room.ChatRoom;
+import com.flextalk.user.User;
 import com.flextalk.util.ExceptionUtil;
 
 import lombok.Getter;
@@ -43,86 +46,29 @@ public class Participant {
 	@JoinColumn(name = "chatroom_key")
 	private ChatRoom room;
 	
-	@Column(name = "is_bookmark", nullable = false, length = 1)
-	@Enumerated(EnumType.STRING)
-	private BookmarkType isBookmark;
+	@Column(name = "is_bookmark", nullable = false, columnDefinition = "char")
+	@Convert(converter = YNCodeConverter.class)
+	private YNCode isBookmark;
 
-	@Column(name = "is_alaram", nullable = false, length = 1)
-	@Enumerated(EnumType.STRING)
-	private AlaramType isAlaram;
+	@Column(name = "is_alaram", nullable = false, columnDefinition = "char")
+	@Convert(converter = YNCodeConverter.class)
+	private YNCode isAlaram;
 	
-	@Column(name ="is_master", nullable = false, length = 1)
-	@Enumerated(EnumType.STRING)
-	private MasterType isMaster;
+	@Column(name ="is_master", nullable = false, columnDefinition = "char")
+	@Convert(converter = YNCodeConverter.class)
+	private YNCode isMaster;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date partDate;
-	
-	private enum BookmarkType {
-		CHECK("1"),
-		UNCHECK("0");
 		
-		private String value;
-		
-		BookmarkType(String value) {
-			this.value = value;
-		}
-		
-		public String getKey() {
-            return name();
-        }
-
-        public String getValue() {
-            return value;
-        }
-	}
-	
-	private enum AlaramType {
-		CHECK("1"),
-		UNCHECK("0");
-		
-		private String value;
-		
-		AlaramType(String value) {
-			this.value = value;
-		}
-		
-		public String getKey() {
-            return name();
-        }
-
-        public String getValue() {
-            return value;
-        }
-	}
-	
-	private enum MasterType {
-		CHECK("1"),
-		UNCHECK("0");
-		
-		private String value;
-		
-		MasterType(String value) {
-			this.value = value;
-		}
-		
-		public String getKey() {
-            return name();
-        }
-
-        public String getValue() {
-            return value;
-        }
-	}
-
-	private Participant(ChatRoom room, User user) {
+	public Participant(ChatRoom room, User user) {
 
 		ExceptionUtil.check(!addRoom(room), NotAddParticipantException.class);
 		
 		this.user = Objects.requireNonNull(user);
-		this.isMaster = MasterType.UNCHECK;
-		this.isAlaram = AlaramType.UNCHECK;
-		this.isBookmark = BookmarkType.UNCHECK;
+		this.isMaster = YNCode.UNCHECK;
+		this.isAlaram = YNCode.UNCHECK;
+		this.isBookmark = YNCode.UNCHECK;
 		this.partDate = new Date();
 		
 		//양방향 조회 가능
@@ -133,15 +79,15 @@ public class Participant {
 		return new Participant(room, user);
 	}
 
-	public void setupBookmark(BookmarkType isBookmark) {
+	public void setupBookmark(YNCode isBookmark) {
 		this.isBookmark = isBookmark;
 	}
 
-	public void setupAlaram(AlaramType isAlaram) {
+	public void setupAlaram(YNCode isAlaram) {
 		this.isAlaram = isAlaram;
 	}
 
-	public void setupMaster(MasterType isMaster) {
+	public void setupMaster(YNCode isMaster) {
 		this.isMaster = isMaster;
 	}
 	

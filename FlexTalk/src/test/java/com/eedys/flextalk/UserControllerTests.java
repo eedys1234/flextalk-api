@@ -3,19 +3,16 @@ package com.eedys.flextalk;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
-import java.util.regex.Matcher;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Matchers;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockRequestDispatcher;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -23,7 +20,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flextalk.common.TestDescripter;
 import com.flextalk.constants.RegExp;
@@ -31,11 +27,9 @@ import com.flextalk.exception.ExceptionAdvice;
 import com.flextalk.pattern.PatternChecker;
 import com.flextalk.user.User;
 import com.flextalk.user.User.UserType;
-
-import javafx.animation.Animation.Status;
-
 import com.flextalk.user.UserController;
 import com.flextalk.user.UserService;
+import com.flextalk.user.UserVO;
 
 @WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -115,10 +109,10 @@ public class UserControllerTests {
 	public void User_Created() throws Exception {
 
 		//Given
-		User user = new User();
+		UserVO.enrollmentRequest user = new UserVO.enrollmentRequest();
 		user.setUserId("test");
-		user.setUserPw("1234");
-		user.setUserType(UserType.FLEXTALK_ID);
+		user.setUserPw("bool!7922");
+		user.setUserType("0");
 		user.setUserEmail("eedys123@naver.com");
 
 		//Then
@@ -138,10 +132,10 @@ public class UserControllerTests {
 	public void User_Created_BAD_REQUEST() throws Exception {
 
 		//Given
-		User user = new User();
+		UserVO.enrollmentRequest user = new UserVO.enrollmentRequest();
 		user.setUserId("te");
 		user.setUserPw("1234");
-		user.setUserType(UserType.FLEXTALK_ID);
+		user.setUserType("0");
 		user.setUserEmail("eedys123@naver.ntewcomw3");
 
 		//Then
@@ -161,7 +155,7 @@ public class UserControllerTests {
 		//Given
 		User user = new User();
 		user.setUserId("test");
-		user.setUserPw("1234");
+		user.setUserPw("bool!7922");
 		
 		//Then
 		mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/login")

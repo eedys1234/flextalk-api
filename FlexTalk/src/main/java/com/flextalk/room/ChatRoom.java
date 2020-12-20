@@ -8,6 +8,7 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -21,8 +22,9 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.flextalk.common.BaseEnumCode;
 import com.flextalk.message.Message;
-import com.flextalk.user.Participant;
+import com.flextalk.participant.Participant;
 
 import lombok.Getter;
 import lombok.ToString;
@@ -38,11 +40,11 @@ public abstract class ChatRoom {
 	@Column(name = "chatroom_name", nullable = false)
 	protected String chatroomName;
 	
-	@Column(name = "chatroom_type", nullable = false)
-	@Enumerated(EnumType.STRING)
+	@Column(name = "chatroom_type", nullable = false, columnDefinition = "char")
+	@Convert(converter = ChatRoomConverter.class)
 	protected RoomType chatroomType;
 	
-	protected enum RoomType {
+	protected enum RoomType implements BaseEnumCode<String> {
 		PERSONAL("0"),
 		GROUP("1");
 		

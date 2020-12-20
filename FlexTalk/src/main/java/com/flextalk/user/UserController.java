@@ -1,6 +1,7 @@
 package com.flextalk.user;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Objects;
 
 import javax.validation.Valid;
@@ -22,8 +23,10 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.flextalk.constants.ResCodes;
 import com.flextalk.exception.EmptyInputValueException;
 import com.flextalk.pattern.PatternChecker;
+import com.flextalk.user.User.UserType;
 import com.flextalk.user.UserVO.findResponse;
 import com.flextalk.util.ApiResponse;
+import com.flextalk.util.EnumUtil;
 import com.flextalk.util.ExceptionUtil;
 
 import lombok.RequiredArgsConstructor;
@@ -31,7 +34,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/api/v1", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+@RequestMapping(value = "/api", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 @Slf4j
 public class UserController {
 
@@ -41,7 +44,7 @@ public class UserController {
 	@Autowired
 	private PatternChecker patternChecker;
 	
-	@PostMapping(value = "/login")
+	@PostMapping(value = "/v1/login")
 	public ResponseEntity<ApiResponse> login(
 			@RequestBody @Valid UserVO.loginRequest request, Errors errors) {		
 
@@ -56,13 +59,13 @@ public class UserController {
 			validator.valid(patternChecker, user);
 		});
 		
-		Long result = userService.login(user);
-		log.debug("result = {}", result.longValue());
+		User result_user = userService.login(user);
+		
 		return new ResponseEntity<ApiResponse>(
-				ApiResponse.of(ResCodes.OK, new UserVO.loginResponse(result.longValue())), HttpStatus.OK);
+				ApiResponse.of(ResCodes.OK, new UserVO.loginResponse(result_user.getUserKey(), result_user.getUserKey()>0?1L:0L)), HttpStatus.OK);
 	}
 	
-	@PostMapping(value = "/enrollment")
+	@PostMapping(value = "/v1/enrollment")
 	public ResponseEntity<ApiResponse> enroll(
 			@RequestBody @Valid UserVO.enrollmentRequest request,
 			UriComponentsBuilder componentsBuilder, 
@@ -74,6 +77,10 @@ public class UserController {
 						.userId(request.getUserId())
 						.userPw(request.getUserPw())
 						.userEmail(request.getUserEmail())
+						.status("0")
+						.regDate(new Date())
+						.userType(EnumUtil.filterEnumType(UserType.class, request.getUserType(), type -> type.getValue().equals(request.getUserType()))
+								.orElseThrow(()-> new IllegalArgumentException(String.format("Unsupported type %s", request.getUserType()))))
 						.build();
 		
 		Arrays.asList(UserValidator.ID, UserValidator.PW, UserValidator.EMAIL).forEach(validator->{
@@ -90,7 +97,7 @@ public class UserController {
 				ApiResponse.of(ResCodes.CREATED, response), httpHeaders, HttpStatus.CREATED);
 	}
 	
-	@GetMapping(value = "/id-overlap/{user_id}")
+	@GetMapping(value = "/v1/id-overlap/{user_id}")
 	public ResponseEntity<ApiResponse> overlapId(
 			@PathVariable("user_id") String userId) {
 		
@@ -107,7 +114,7 @@ public class UserController {
 		return new ResponseEntity<>(ApiResponse.of(ResCodes.OK, new UserVO.overlapIdResponse(result)), HttpStatus.OK);
 	}
 	
-	@GetMapping(value = "/id")
+	@GetMapping(value = "/v1/id")
 	public ResponseEntity<ApiResponse> findId(
 			@RequestBody UserVO.findRequest request) {
 
@@ -119,7 +126,7 @@ public class UserController {
 				ApiResponse.of(ResCodes.OK, response), HttpStatus.OK);
 	}
 	
-	@GetMapping(value = "/pw")
+	@GetMapping(value = "/v1/pw")
 	public ResponseEntity<ApiResponse> findPw(
 			@RequestBody UserVO.findRequest request) {
 		

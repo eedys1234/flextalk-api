@@ -2,17 +2,15 @@ package com.flextalk.room;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.flextalk.exception.NotCreateRoomException;
-import com.flextalk.user.Participant;
+import com.flextalk.common.YNCode;
+import com.flextalk.participant.Participant;
 import com.flextalk.user.User;
 import com.flextalk.user.UserRepository;
-import com.flextalk.util.ExceptionUtil;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -27,29 +25,21 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 	
 	@Autowired
 	private UserRepository userRepository;
-	
-	@Autowired
-	private ChatRoomHolder roomHolder;
-	
+		
 	@Override
 	@Transactional
-	public ChatRoomVO.createResponse create(long userKey, String chatroomType, String chatroomName) {
+	public ChatRoomVO.createResponse create(long userKey, ChatRoom chatRoom) {
 		
-		//ChatRoom 팩토리 객체 생성
-		ChatRoomFactory factory = roomHolder.createFactory();
-		ChatRoom room = factory.createRoom(chatroomType, chatroomName);
-
-		ExceptionUtil.check(Objects.isNull(room), NotCreateRoomException.class);
-
 		//사용자 정보 가져오기 
 		User user = userRepository.findByUserKey(userKey);
 		
 		//참여자 생성
-		Participant participant = Participant.of(room, user);
-
-		room.addParticipant(participant);
+		Participant participant = Participant.of(chatRoom, user);
+		participant.setupMaster(YNCode.CHECK);
+		chatRoom.addParticipant(participant);
+		
 		//채팅방 생성
-		ChatRoom savedRoom = chatRoomRepository.save(room);	
+		ChatRoom savedRoom = chatRoomRepository.save(chatRoom);	
 		ChatRoomVO.createResponse response = new ChatRoomVO.createResponse(savedRoom.getChatroomKey());
 				
 		return response;		

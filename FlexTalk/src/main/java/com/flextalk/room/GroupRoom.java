@@ -8,10 +8,8 @@ import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import com.flextalk.user.Participant;
+import com.flextalk.participant.Participant;
 
-//@Entity
-//@Table(name = "tb_ChatRoom")
 public class GroupRoom extends ChatRoom {
 //	https://www.logicbig.com/how-to/code-snippets/jcode-java-8-streams-collectors-toconcurrentmap.html
 //	Stream.concat(participants.stream(), addParticipants.stream())
