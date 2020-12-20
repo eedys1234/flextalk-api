@@ -1,8 +1,8 @@
 package com.eedys.flextalk;
 
 import static org.junit.Assert.assertNotNull;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -17,7 +17,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flextalk.common.TestDescripter;
 import com.flextalk.constants.XHeader;
@@ -63,8 +62,7 @@ public class ChatRoomControllerTests {
 		    		  .build();	
 		   
 	}
-	
-	
+		
 	@Test
 	@TestDescripter("채팅방 생성 테스트")
 	public void testCreatedChatRoom() {
@@ -76,23 +74,50 @@ public class ChatRoomControllerTests {
 		assertNotNull(room);
 	}
 	
-	@Test
-	@TestDescripter("채팅방 생성 API 테스트")
+//	@Test
+	@TestDescripter("채팅방 생성 API 성공 테스트")
 	public void ChatRoom_Created() throws Exception {
 		
-		ChatRoomVO.createReqeust chatroom = new ChatRoomVO.createReqeust();
-		chatroom.setChatroom_name("테스트 채팅방1");
-		chatroom.setChatroom_type("0");		
+		ChatRoomVO.createReqeust chatRoom = new ChatRoomVO.createReqeust();
+		chatRoom.setChatroom_name("테스트 채팅방1");
+		chatRoom.setChatroom_type("0");		
 		
-		mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/room")
+		mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/room/1")
 				.contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
 				.accept(MediaType.APPLICATION_JSON_UTF8_VALUE)
-				.header(XHeader.X_USER_ID, 1)
-				.content(objectMapper.writeValueAsString(chatroom)))
+				.content(objectMapper.writeValueAsString(chatRoom)))
 		.andDo(print())
-		.andExpect(jsonPath("$.status").value(200));
+		.andExpect(status().isCreated())
+		.andExpect(jsonPath("$.status").value(201));
 		
 	}
 	
 	
+	@Test
+	@TestDescripter("채팅방 생성 API 실패 테스트")
+	public void ChatRoom_Created_BAD_REQUEST() throws Exception {
+		
+		ChatRoomVO.createReqeust chatRoom = new ChatRoomVO.createReqeust();
+		chatRoom.setChatroom_name("테스트 채팅방2");
+		chatRoom.setChatroom_name("0");
+
+		mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/room/2")
+				.contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+				.accept(MediaType.APPLICATION_JSON_UTF8_VALUE))
+		.andDo(print())
+		.andExpect(status().isBadRequest());
+	
+	}
+	
+	@Test
+	@TestDescripter("채팅방 리스트 가져오기 API 성공 테스트")
+	public void ChatRoomList_OK() throws Exception {
+		
+		mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/rooms/1?page=1&size=3")
+				.contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+				.accept(MediaType.APPLICATION_JSON_UTF8_VALUE))
+		.andDo(print())
+		.andExpect(status().isOk());
+	
+	}
 }

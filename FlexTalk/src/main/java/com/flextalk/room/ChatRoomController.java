@@ -1,6 +1,7 @@
 package com.flextalk.room;
 
 import java.util.Arrays;
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -47,9 +49,9 @@ public class ChatRoomController {
 	 * Room »ý¼º
 	 * @return
 	 */
-	@PostMapping(value = "v1/room")
+	@PostMapping(value = "v1/room/{userKey}")
 	public ResponseEntity<ApiResponse> create(
-			@RequestHeader(XHeader.X_USER_ID) long userKey,
+			@PathVariable("userKey") long userKey,
 			@RequestBody @Valid ChatRoomVO.createReqeust request, 
 			Errors errors,
 			UriComponentsBuilder componentsBuilder) {
@@ -74,10 +76,13 @@ public class ChatRoomController {
 	
 	@GetMapping(value = "v1/rooms/{userKey}")
 	public ResponseEntity<ApiResponse> findAllRoom(
+			@RequestParam("page") int pageNo,
+			@RequestParam("size") int size,
 			@PathVariable("userKey") long userKey) {
 		
-		chatRoomService.findAllRoom(userKey);
-		return new ResponseEntity<>(null, HttpStatus.OK);
+		List<ChatRoomVO.chatRoomInfo> chatRooms = chatRoomService.findRooms(userKey, pageNo, size);
+		
+		return new ResponseEntity<>(ApiResponse.of(ResCodes.OK, new ChatRoomVO.findRoomsResponse(chatRooms)), HttpStatus.OK);
 	}
 	
 	@DeleteMapping(value = "v1/room/{chatroomKey}")

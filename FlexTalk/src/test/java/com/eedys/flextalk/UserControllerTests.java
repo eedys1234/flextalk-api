@@ -104,7 +104,7 @@ public class UserControllerTests {
 
 	}
 
-//	@Test
+	@Test
 	@TestDescripter("사용자 생성 API 성공 테스트")
 	public void User_Created() throws Exception {
 
@@ -148,7 +148,7 @@ public class UserControllerTests {
 		.andExpect(jsonPath("$.status").value(400));
 	}
 	
-	@Test
+//	@Test
 	@TestDescripter("사용자 로그인 API 성공 테스트")
 	public void User_Login_OK() throws Exception {
 		

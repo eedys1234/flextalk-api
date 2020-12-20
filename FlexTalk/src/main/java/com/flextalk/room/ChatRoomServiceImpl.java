@@ -1,14 +1,19 @@
 package com.flextalk.room;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.flextalk.common.YNCode;
 import com.flextalk.participant.Participant;
+import com.flextalk.room.ChatRoom.RoomType;
+import com.flextalk.room.ChatRoomVO.chatRoomInfo;
 import com.flextalk.user.User;
 import com.flextalk.user.UserRepository;
 
@@ -47,11 +52,26 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<ChatRoom> findAllRoom(long userKey) {
+	public List<ChatRoomVO.chatRoomInfo> findRooms(long userKey, int pageNo, int size) {
 		
-		List<ChatRoom> listRoom = new ArrayList<ChatRoom>();
-//		List<ChatRoom> listRoom = chatRoomRepository.findAllRoom(userKey);
-		return listRoom;
+		Pageable pageable = new PageRequest(pageNo - 1, size);
+		List<Object[]> chatRooms = chatRoomRepository.findRooms(userKey, pageable);
+		List<ChatRoomVO.chatRoomInfo> NewChatRooms = new ArrayList<>();
+		for(Object[] roomInfo : chatRooms) {
+			NewChatRooms.add(
+			chatRoomInfo.builder()
+						.chatroom_key((long)roomInfo[0])
+						.chatroom_name((String)roomInfo[1])
+						.chatroom_type(((RoomType)roomInfo[2]).getValue())
+						.chatroom_date((Date)roomInfo[3])
+						.is_bookmark(((YNCode)roomInfo[4]).getValue())
+						.is_alaram(((YNCode)roomInfo[5]).getValue())
+						.is_master(((YNCode)roomInfo[6]).getValue())
+						.build()
+			);
+		}
+
+		return NewChatRooms;
 	}
 
 	@Override

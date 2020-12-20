@@ -29,8 +29,8 @@ public enum UserValidator {
 		@Override
 		public void valid(PatternChecker patternChecker, User user) {
 			ExceptionUtil.check(!patternChecker.valid(RegExp.EMAIL_REGEXP, user.getUserEmail()), InValidUserEmailException.class);			
-		}		
-	};	
+		}
+	};
 	
 	public abstract void valid(PatternChecker patternChecker, User user);
 }

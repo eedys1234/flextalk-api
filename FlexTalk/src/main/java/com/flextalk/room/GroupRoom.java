@@ -7,15 +7,18 @@ import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.flextalk.participant.Participant;
 
+@Entity
 public class GroupRoom extends ChatRoom {
 //	https://www.logicbig.com/how-to/code-snippets/jcode-java-8-streams-collectors-toconcurrentmap.html
 //	Stream.concat(participants.stream(), addParticipants.stream())
 //	  .collect(Collectors.toConcurrentMap(Participant::getUserId, Function.identity(), (p, q)->p)).values()
 //	  .stream().collect(Collectors.toList());
 
+	@Transient
 	private static final int GROUP_CNT = 1000;
 	
 	private GroupRoom() {

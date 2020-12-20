@@ -18,3 +18,5 @@
 [23:05:11,213-ERROR] InValidUserIdException (ExceptionAdvice.java.handleInValidUserIdException():37) [com.flextalk.exception.ExceptionAdvice]
 [23:05:11,733-ERROR] DuplicationUserIdException (ExceptionAdvice.java.handleDuplicationUserIdException():19) [com.flextalk.exception.ExceptionAdvice]
 [23:05:11,870-ERROR] InValidUserIdException (ExceptionAdvice.java.handleInValidUserIdException():37) [com.flextalk.exception.ExceptionAdvice]
+[23:56:06,480-ERROR] InValidUserIdException (ExceptionAdvice.java.handleInValidUserIdException():37) [com.flextalk.exception.ExceptionAdvice]
+[23:56:06,950-ERROR] InValidUserIdException (ExceptionAdvice.java.handleInValidUserIdException():37) [com.flextalk.exception.ExceptionAdvice]

@@ -35,6 +35,7 @@ import lombok.ToString;
 public abstract class ChatRoom {
 	
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "chatroom_key")
 	protected Long chatroomKey;
 	
 	@Column(name = "chatroom_name", nullable = false)
