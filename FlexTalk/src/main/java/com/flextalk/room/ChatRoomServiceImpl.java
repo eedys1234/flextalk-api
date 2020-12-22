@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.flextalk.common.YNCode;
 import com.flextalk.participant.Participant;
+import com.flextalk.participant.ParticipantRepository;
 import com.flextalk.room.ChatRoom.RoomType;
 import com.flextalk.room.ChatRoomVO.chatRoomInfo;
 import com.flextalk.user.User;
@@ -21,16 +22,18 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
-@NoArgsConstructor
 @Service
 public class ChatRoomServiceImpl implements ChatRoomService {
 
 	@Autowired
-	private ChatRoomRepository chatRoomRepository;
+	private final ChatRoomRepository chatRoomRepository;
 	
 	@Autowired
-	private UserRepository userRepository;
+	private final UserRepository userRepository;
 		
+	@Autowired
+	private final ParticipantRepository participantRepository;
+	
 	@Override
 	@Transactional
 	public ChatRoomVO.createResponse create(long userKey, ChatRoom chatRoom) {
@@ -78,7 +81,6 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 	@Transactional
 	public int remove(long userKey, long chatroomKey) {
 		
-		//Valid checking
 		chatRoomRepository.delete(chatroomKey);
 		return 0;
 		

@@ -25,10 +25,12 @@ import com.flextalk.user.User;
 import com.flextalk.util.ExceptionUtil;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Getter
 @Entity
+@NoArgsConstructor
 @Table(name = "tb_participant")
 @ToString(exclude = {"user", "room"})
 public class Participant {

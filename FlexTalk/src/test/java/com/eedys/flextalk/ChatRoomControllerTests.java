@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Matchers;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -82,9 +83,10 @@ public class ChatRoomControllerTests {
 		chatRoom.setChatroom_name("테스트 채팅방1");
 		chatRoom.setChatroom_type("0");		
 		
-		mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/room/1")
+		mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/room")
 				.contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
 				.accept(MediaType.APPLICATION_JSON_UTF8_VALUE)
+				.header(XHeader.X_USER_ID, 1)
 				.content(objectMapper.writeValueAsString(chatRoom)))
 		.andDo(print())
 		.andExpect(status().isCreated())
@@ -99,13 +101,16 @@ public class ChatRoomControllerTests {
 		
 		ChatRoomVO.createReqeust chatRoom = new ChatRoomVO.createReqeust();
 		chatRoom.setChatroom_name("테스트 채팅방2");
-		chatRoom.setChatroom_name("0");
+		chatRoom.setChatroom_name("3");
 
-		mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/room/2")
+		mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/room")
 				.contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-				.accept(MediaType.APPLICATION_JSON_UTF8_VALUE))
+				.accept(MediaType.APPLICATION_JSON_UTF8_VALUE)
+				.header(XHeader.X_USER_ID, 2)
+				.content(objectMapper.writeValueAsString(chatRoom)))		
 		.andDo(print())
-		.andExpect(status().isBadRequest());
+		.andExpect(status().isBadRequest())
+		;
 	
 	}
 	
@@ -113,11 +118,41 @@ public class ChatRoomControllerTests {
 	@TestDescripter("채팅방 리스트 가져오기 API 성공 테스트")
 	public void ChatRoomList_OK() throws Exception {
 		
-		mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/rooms/1?page=1&size=3")
+		mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/rooms?pageNo=1&size=3")
+				.contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+				.accept(MediaType.APPLICATION_JSON_UTF8_VALUE)
+				.header(XHeader.X_USER_ID, 1))
+		.andDo(print())
+		.andExpect(status().isOk())
+		.andExpect(jsonPath("$.body.chatRoom_list", Matchers.notNull()).isArray())		
+		.andExpect(jsonPath("$.body.chatRoom_list[0].length()").value(7))
+		;	
+	}
+	
+	@Test
+	@TestDescripter("채팅방 리스트 가져오기 API 실패 테스트")
+	public void ChatRoomList_BAD_REQUEST() throws Exception {
+		
+		mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/rooms?pageNo=1")
 				.contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
 				.accept(MediaType.APPLICATION_JSON_UTF8_VALUE))
 		.andDo(print())
-		.andExpect(status().isOk());
+		.andExpect(status().isBadRequest())
+		;
+		
+	}
 	
+	@Test
+	@TestDescripter("채팅방 나가기 API 성공 테스트")
+	public void ChatRoom_Leave_OK() throws Exception {
+		
+		mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/room/1")
+				.contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+				.accept(MediaType.APPLICATION_JSON_UTF8_VALUE)
+				.header(XHeader.X_USER_ID, 1))
+		.andDo(print())
+		.andExpect(status().isOk())
+		.andExpect(jsonPath("$.status").value(200))
+		;
 	}
 }

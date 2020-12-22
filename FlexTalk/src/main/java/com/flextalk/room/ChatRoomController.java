@@ -49,13 +49,15 @@ public class ChatRoomController {
 	 * Room »ý¼º
 	 * @return
 	 */
-	@PostMapping(value = "v1/room/{userKey}")
+	@PostMapping(value = "v1/room")
 	public ResponseEntity<ApiResponse> create(
-			@PathVariable("userKey") long userKey,
+			@RequestHeader(XHeader.X_USER_ID) long userKey,
 			@RequestBody @Valid ChatRoomVO.createReqeust request, 
 			Errors errors,
 			UriComponentsBuilder componentsBuilder) {
 		
+		log.debug("chatroomType = {} chatroomName = {}", request.getChatroom_type(), request.getChatroom_name());
+
 		ExceptionUtil.check(errors.hasErrors(), EmptyInputValueException.class);
 				
 		ChatRoomFactory factory = chatRoomHolder.createFactory();
@@ -74,12 +76,17 @@ public class ChatRoomController {
 				ApiResponse.of(ResCodes.OK, response), httpHeaders, HttpStatus.CREATED);
 	}
 	
-	@GetMapping(value = "v1/rooms/{userKey}")
+	@GetMapping(value = "v1/rooms")
 	public ResponseEntity<ApiResponse> findAllRoom(
-			@RequestParam("page") int pageNo,
+			@RequestParam("pageNo") int pageNo,
 			@RequestParam("size") int size,
-			@PathVariable("userKey") long userKey) {
+			@RequestHeader(XHeader.X_USER_ID) long userKey) {
 		
+		if(size <= 0 || pageNo < 0) {
+			throw new IllegalArgumentException();
+		}
+		
+		log.debug("pageNo = {} size = {}", pageNo, size);
 		List<ChatRoomVO.chatRoomInfo> chatRooms = chatRoomService.findRooms(userKey, pageNo, size);
 		
 		return new ResponseEntity<>(ApiResponse.of(ResCodes.OK, new ChatRoomVO.findRoomsResponse(chatRooms)), HttpStatus.OK);
@@ -90,8 +97,10 @@ public class ChatRoomController {
 			@RequestHeader(XHeader.X_USER_ID) long userKey,
 			@PathVariable("chatroomKey") long chatroomKey) {
 		
+		log.debug("chatroomKey = {}", chatroomKey);
+		
 		chatRoomService.remove(userKey, chatroomKey);
-		return new ResponseEntity<>(null, HttpStatus.OK);
+		return new ResponseEntity<>(ApiResponse.of(ResCodes.OK), HttpStatus.OK);
 	}
 	
 	
