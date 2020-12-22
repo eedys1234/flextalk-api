@@ -18,13 +18,13 @@ public class PersonalRoom extends ChatRoom {
 	private final int PERSONAL_CNT = 2;
 	
 	private PersonalRoom() {
-		this.chatroomType = RoomType.PERSONAL;
+		this.chatroom_type = ChatRoomType.PERSONAL;
 	}
 	
 	private PersonalRoom(String chatroomName) {
 		this();
-		this.chatroomName = Objects.requireNonNull(chatroomName);
-		this.regDate = new Date();
+		this.chatroom_name = Objects.requireNonNull(chatroomName);
+		this.reg_date = new Date();
 	}
 	
 	public static PersonalRoom of(String chatroomName) {

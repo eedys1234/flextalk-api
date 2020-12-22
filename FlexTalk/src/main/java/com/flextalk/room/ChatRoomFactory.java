@@ -2,9 +2,7 @@ package com.flextalk.room;
 import java.util.Optional;
 
 import com.flextalk.exception.NotCreateRoomException;
-import com.flextalk.participant.Participant;
-import com.flextalk.room.ChatRoom.RoomType;
-import com.flextalk.user.User;
+import com.flextalk.room.ChatRoom.ChatRoomType;
 import com.flextalk.util.EnumUtil;
 
 public class ChatRoomFactory {
@@ -18,12 +16,12 @@ public class ChatRoomFactory {
 	 */
 	public ChatRoom createRoom(String chatroomType, String roomName) {
 
-		Optional<RoomType> optional = EnumUtil.filterEnumType(RoomType.class, chatroomType, type -> type.getValue().equals(chatroomType));
+		Optional<ChatRoomType> optional = EnumUtil.filterEnumType(ChatRoomType.class, chatroomType, type -> type.getValue().equals(chatroomType));
 		
 		return getRoom(optional.orElseThrow(()-> new NotCreateRoomException()), roomName);
 	}
 		
-	private ChatRoom getRoom(RoomType roomType, String roomName) {
+	private ChatRoom getRoom(ChatRoomType roomType, String roomName) {
 
 		switch(roomType) {
 			case PERSONAL : {

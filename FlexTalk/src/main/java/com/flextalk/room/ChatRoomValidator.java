@@ -3,7 +3,7 @@ package com.flextalk.room;
 import java.util.Objects;
 
 import com.flextalk.exception.NotCreateRoomException;
-import com.flextalk.room.ChatRoom.RoomType;
+import com.flextalk.room.ChatRoom.ChatRoomType;
 import com.flextalk.util.ExceptionUtil;
 
 public enum ChatRoomValidator {
@@ -19,8 +19,8 @@ public enum ChatRoomValidator {
 		
 		@Override
 		public void valid(ChatRoom chatRoom) {
-			ExceptionUtil.check(!(RoomType.GROUP.equals(chatRoom.getChatroomType()) || 
-					RoomType.PERSONAL.equals(chatRoom.getChatroomType())), NotCreateRoomException.class);
+			ExceptionUtil.check(!(ChatRoomType.GROUP.equals(chatRoom.getChatroom_type()) || 
+					ChatRoomType.PERSONAL.equals(chatRoom.getChatroom_type())), NotCreateRoomException.class);
 		}
 	};
 	

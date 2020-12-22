@@ -33,28 +33,23 @@ import lombok.Setter;
 @Table(name = "tb_User")
 public class User {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long userKey;
+	@Id @GeneratedValue
+	private Long user_key;
 
-	@Column(name = "user_id")
-	private String userId;
+	private String user_id;
 	
-	@Column(name = "user_pw")
-	private String userPw;
+	private String user_pw;
 	
-	@Column(name = "status")
 	private String status;
 	
-	@Column(name = "user_type", columnDefinition = "char")
+	@Column(columnDefinition = "char")
 	@Convert(converter = UserTypeConverter.class)
-	private UserType userType;
+	private UserType user_type;
 
-	@Column(name = "user_email")
-	private String userEmail;
+	private String user_email;
 	
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date regDate;
+	private Date reg_date;
 
 	public enum UserType implements BaseEnumCode<String>{
 		FLEXTALK_ID("0"),
@@ -73,16 +68,15 @@ public class User {
 		public String getValue() {
 			return this.value;
 		}
-		
 	}
 	
 	
-	public User(String userId, String userPw, String userEmail) {
-		this.userId = userId;
-		this.userPw = userPw;
-		this.userEmail = userEmail;
-		this.userType = UserType.FLEXTALK_ID;
-		this.regDate = new Date();
+	public User(String user_id, String user_pw, String user_email) {
+		this.user_id = user_id;
+		this.user_pw = user_pw;
+		this.user_email = user_email;
+		this.user_type = UserType.FLEXTALK_ID;
+		this.reg_date = new Date();
 		this.status = "0";
 	}
 }

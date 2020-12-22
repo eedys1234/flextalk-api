@@ -16,10 +16,10 @@ public class UserVO {
 	public static class loginRequest {
 
 		@NotEmpty(message = "아이디는 필수입력 값입니다.")
-		private String userId;
+		private String user_id;
 
 		@NotEmpty(message = "비밀번호는 필수입력 값입니다.")
-		private String userPw;		
+		private String user_pw;		
 		
 	}
 	
@@ -29,8 +29,8 @@ public class UserVO {
 	@AllArgsConstructor
 	@NoArgsConstructor
 	public static class loginResponse {
-		private long userKey;
-		private long loginYN;
+		private long user_key;
+		private long login_YN;
 	}
 	
 	@Getter
@@ -39,16 +39,16 @@ public class UserVO {
 	public static class enrollmentRequest {
 		
 		@NotEmpty(message = "아이디는 필수입력 값입니다.")
-		private String userId;
+		private String user_id;
 		
 		@NotEmpty(message = "비밀번호는 필수입력 값입니다.")
-		private String userPw;
+		private String user_pw;
 
 		@NotEmpty(message = "이메일은 필수입력 값입니다.")
-		private String userEmail;
+		private String user_email;
 		
 		@NotEmpty
-		private String userType;
+		private String user_type;
 	}
 
 	@Getter
@@ -57,14 +57,14 @@ public class UserVO {
 	@AllArgsConstructor
 	@ToString
 	public static class enrollmentResponse {
-		private int enrollYN;
+		private int enroll_YN;
 	}
 	
 	@Getter
 	@Setter
 	@ToString
 	public static class overlapIdReqeust {
-		private String userId;
+		private String user_id;
 	}
 
 	@Getter
@@ -72,7 +72,7 @@ public class UserVO {
 	@NoArgsConstructor	
 	@AllArgsConstructor
 	public static class overlapIdResponse { 
-		private long overlapYN;
+		private long overlap_YN;
 	}
 	
 	@Getter
@@ -80,8 +80,8 @@ public class UserVO {
 	@ToString
 	public static class findRequest {
 		
-		private String userId;
-		private String userEmail;
+		private String user_id;
+		private String user_email;
 	}
 	
 	@Getter
@@ -89,7 +89,7 @@ public class UserVO {
 	@ToString
 	public static class findResponse {
 		
-		private String userId;
-		private String userPwLink;
+		private String user_id;
+		private String user_pw_Link;
 	}
 }

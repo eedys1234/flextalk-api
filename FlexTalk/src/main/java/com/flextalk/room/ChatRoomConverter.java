@@ -1,13 +1,13 @@
 package com.flextalk.room;
 
 import com.flextalk.common.AbstractBaseEnumConverter;
-import com.flextalk.room.ChatRoom.RoomType;
+import com.flextalk.room.ChatRoom.ChatRoomType;
 
-public class ChatRoomConverter extends AbstractBaseEnumConverter<RoomType, String>{
+public class ChatRoomConverter extends AbstractBaseEnumConverter<ChatRoomType, String>{
 
 	@Override
-	protected RoomType[] getValueList() {
-		return RoomType.values();
+	protected ChatRoomType[] getValueList() {
+		return ChatRoomType.values();
 	}
 
 }

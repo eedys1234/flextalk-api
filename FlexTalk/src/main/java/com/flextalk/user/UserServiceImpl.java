@@ -18,7 +18,7 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	public User login(User user) {
-		return userRepository.findByUserIdAndUserPw(user.getUserId(), user.getUserPw());		
+		return userRepository.findByUserIdAndUserPw(user.getUser_id(), user.getUser_pw());		
 	}
 
 	@Override
@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	public Long overlap(User user) {
-		return userRepository.findByUserId(user.getUserId());
+		return userRepository.findByUserId(user.getUser_id());
 	}
 
 	@Override

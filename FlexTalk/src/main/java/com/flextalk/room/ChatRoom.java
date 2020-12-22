@@ -34,24 +34,23 @@ import lombok.ToString;
 @Table(name = "tb_ChatRoom")
 public abstract class ChatRoom {
 	
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "chatroom_key")
-	protected Long chatroomKey;
+	@Id @GeneratedValue
+	protected Long chatroom_key;
 	
-	@Column(name = "chatroom_name", nullable = false)
-	protected String chatroomName;
+	@Column(nullable = false)
+	protected String chatroom_name;
 	
-	@Column(name = "chatroom_type", nullable = false, columnDefinition = "char")
+	@Column(nullable = false, columnDefinition = "char")
 	@Convert(converter = ChatRoomConverter.class)
-	protected RoomType chatroomType;
+	protected ChatRoomType chatroom_type;
 	
-	protected enum RoomType implements BaseEnumCode<String> {
+	protected enum ChatRoomType implements BaseEnumCode<String> {
 		PERSONAL("0"),
 		GROUP("1");
 		
 		private String value;
 
-		RoomType(String value) {
+		ChatRoomType(String value) {
 			this.value = value;
 		}
 		
@@ -65,7 +64,8 @@ public abstract class ChatRoom {
 	}
 
 	@Temporal(TemporalType.TIMESTAMP)
-	protected Date regDate;
+	@Column(name = "reg_date")
+	protected Date reg_date;
 	
 	@OneToMany(mappedBy = "room", fetch = FetchType.LAZY, cascade = {
 			CascadeType.PERSIST, 
@@ -74,7 +74,7 @@ public abstract class ChatRoom {
 	protected Set<Participant> participants = new HashSet<Participant>();
 	
 	@OneToMany(mappedBy = "room", fetch = FetchType.LAZY)
-	protected List<Message> message = new ArrayList<Message>();
+	protected List<Message> messages = new ArrayList<Message>();
 	
 	public abstract boolean isVisit(Set<Participant> participants);
 	

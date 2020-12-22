@@ -35,10 +35,8 @@ import lombok.ToString;
 @ToString(exclude = {"user", "room"})
 public class Participant {
 	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "participant_key")
-	private Long participantKey;
+	@Id @GeneratedValue
+	private Long participant_key;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_key")
@@ -50,15 +48,15 @@ public class Participant {
 	
 	@Column(name = "is_bookmark", nullable = false, columnDefinition = "char")
 	@Convert(converter = YNCodeConverter.class)
-	private YNCode isBookmark;
+	private YNCode is_bookmark;
 
 	@Column(name = "is_alaram", nullable = false, columnDefinition = "char")
 	@Convert(converter = YNCodeConverter.class)
-	private YNCode isAlaram;
+	private YNCode is_alaram;
 	
 	@Column(name ="is_master", nullable = false, columnDefinition = "char")
 	@Convert(converter = YNCodeConverter.class)
-	private YNCode isMaster;
+	private YNCode is_master;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date partDate;
@@ -68,9 +66,9 @@ public class Participant {
 		ExceptionUtil.check(!addRoom(room), NotAddParticipantException.class);
 		
 		this.user = Objects.requireNonNull(user);
-		this.isMaster = YNCode.UNCHECK;
-		this.isAlaram = YNCode.UNCHECK;
-		this.isBookmark = YNCode.UNCHECK;
+		this.is_master = YNCode.UNCHECK;
+		this.is_alaram = YNCode.UNCHECK;
+		this.is_bookmark = YNCode.UNCHECK;
 		this.partDate = new Date();
 		
 		//양방향 조회 가능
@@ -82,15 +80,15 @@ public class Participant {
 	}
 
 	public void setupBookmark(YNCode isBookmark) {
-		this.isBookmark = isBookmark;
+		this.is_bookmark = isBookmark;
 	}
 
 	public void setupAlaram(YNCode isAlaram) {
-		this.isAlaram = isAlaram;
+		this.is_alaram = isAlaram;
 	}
 
 	public void setupMaster(YNCode isMaster) {
-		this.isMaster = isMaster;
+		this.is_master = isMaster;
 	}
 	
 	public boolean addRoom(ChatRoom room) {
@@ -102,7 +100,7 @@ public class Participant {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((participantKey == null) ? 0 : participantKey.hashCode());
+		result = prime * result + ((participant_key == null) ? 0 : participant_key.hashCode());
 		return result;
 	}
 
@@ -117,7 +115,7 @@ public class Participant {
 		}
 		
 		Participant other = (Participant) obj;		
-		return Long.compare(this.participantKey, other.participantKey) == 0;
+		return Long.compare(this.participant_key, other.participant_key) == 0;
 	}
 	
 }

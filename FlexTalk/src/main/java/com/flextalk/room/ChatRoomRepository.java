@@ -11,11 +11,11 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
 	
-	@Query("SELECT chat.chatroomKey, chat.chatroomName, chat.chatroomType, chat.regDate, part.isBookmark, part.isAlaram, part.isMaster "
+	@Query("SELECT chat.chatroom_key, chat.chatroom_name, chat.chatroom_type, chat.reg_date, part.is_bookmark, part.is_alaram, part.is_master "
 			+ "FROM ChatRoom chat JOIN FETCH Participant part "
-			+ "ON chat.chatroomKey = part.room.chatroomKey "
-			+ "WHERE part.user.userKey = :user_key "
-			+ "ORDER BY chat.regDate DESC")
-	public List<Object[]> findRooms(@Param("user_key") long userKey, Pageable pageable);
+			+ "ON chat.chatroom_key = part.room.chatroom_key "
+			+ "WHERE part.user.user_key = :user_key "
+			+ "ORDER BY chat.reg_date DESC")
+	public List<Object[]> findRooms(@Param("user_key") long user_key, Pageable pageable);
 
 }

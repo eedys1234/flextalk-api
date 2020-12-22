@@ -22,13 +22,13 @@ public class GroupRoom extends ChatRoom {
 	private static final int GROUP_CNT = 1000;
 	
 	private GroupRoom() {
-		this.chatroomType = RoomType.GROUP;
+		this.chatroom_type = ChatRoomType.GROUP;
 	}
 	
-	private GroupRoom(String chatroomName) {
+	private GroupRoom(String chatroom_name) {
 		this();
-		this.chatroomName = Objects.requireNonNull(chatroomName);
-		this.regDate = new Date();
+		this.chatroom_name = Objects.requireNonNull(chatroom_name);
+		this.reg_date = new Date();
 	}
 	
 	public static GroupRoom of(String chatroomName) {

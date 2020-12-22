@@ -13,14 +13,14 @@ public enum UserValidator {
 		
 		@Override
 		public void valid(PatternChecker patternChecker, User user) {
-			ExceptionUtil.check(!patternChecker.valid(RegExp.ID_REGEXP, user.getUserId()), InValidUserIdException.class);
+			ExceptionUtil.check(!patternChecker.valid(RegExp.ID_REGEXP, user.getUser_id()), InValidUserIdException.class);
 		}
 	},
 	PW {
 		
 		@Override
 		public void valid(PatternChecker patternChecker, User user) {
-			ExceptionUtil.check(!patternChecker.valid(RegExp.PW_REGEXP, user.getUserPw()), InValidUserPwException.class);			
+			ExceptionUtil.check(!patternChecker.valid(RegExp.PW_REGEXP, user.getUser_pw()), InValidUserPwException.class);			
 		}
 		
 	},
@@ -28,7 +28,7 @@ public enum UserValidator {
 		
 		@Override
 		public void valid(PatternChecker patternChecker, User user) {
-			ExceptionUtil.check(!patternChecker.valid(RegExp.EMAIL_REGEXP, user.getUserEmail()), InValidUserEmailException.class);			
+			ExceptionUtil.check(!patternChecker.valid(RegExp.EMAIL_REGEXP, user.getUser_email()), InValidUserEmailException.class);			
 		}
 	};
 	

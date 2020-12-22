@@ -13,13 +13,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.flextalk.common.YNCode;
 import com.flextalk.participant.Participant;
 import com.flextalk.participant.ParticipantRepository;
-import com.flextalk.room.ChatRoom.RoomType;
+import com.flextalk.room.ChatRoom.ChatRoomType;
 import com.flextalk.room.ChatRoomVO.chatRoomInfo;
 import com.flextalk.user.User;
 import com.flextalk.user.UserRepository;
 
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
 @Service
@@ -36,10 +35,10 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 	
 	@Override
 	@Transactional
-	public ChatRoomVO.createResponse create(long userKey, ChatRoom chatRoom) {
+	public ChatRoomVO.createResponse create(long user_key, ChatRoom chatRoom) {
 		
 		//사용자 정보 가져오기 
-		User user = userRepository.findByUserKey(userKey);
+		User user = userRepository.findByUser_key(user_key);
 		
 		//참여자 생성
 		Participant participant = Participant.of(chatRoom, user);
@@ -48,7 +47,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 		
 		//채팅방 생성
 		ChatRoom savedRoom = chatRoomRepository.save(chatRoom);	
-		ChatRoomVO.createResponse response = new ChatRoomVO.createResponse(savedRoom.getChatroomKey());
+		ChatRoomVO.createResponse response = new ChatRoomVO.createResponse(savedRoom.getChatroom_key());
 				
 		return response;		
 	}
@@ -65,7 +64,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 			chatRoomInfo.builder()
 						.chatroom_key((long)roomInfo[0])
 						.chatroom_name((String)roomInfo[1])
-						.chatroom_type(((RoomType)roomInfo[2]).getValue())
+						.chatroom_type(((ChatRoomType)roomInfo[2]).getValue())
 						.chatroom_date((Date)roomInfo[3])
 						.is_bookmark(((YNCode)roomInfo[4]).getValue())
 						.is_alaram(((YNCode)roomInfo[5]).getValue())

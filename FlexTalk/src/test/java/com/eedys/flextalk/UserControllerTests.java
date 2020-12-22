@@ -45,10 +45,7 @@ public class UserControllerTests {
 	
 	@Autowired
 	private UserController userController;
-	
-	@Autowired
-	private UserService userService;
-	
+		
 	@Autowired
 	private PatternChecker patternChecker;
 	
@@ -65,12 +62,12 @@ public class UserControllerTests {
 	public void TestUser() {
 		
 		//Given
-		User user = new User();
-		user.setUserKey(10L);
-		user.setUserId("test");
-		user.setUserPw("1234");
-		user.setUserType(UserType.FLEXTALK_ID);
-
+		User user = User.builder()
+						.user_key(10L)
+						.user_id("test")
+						.user_pw("1234")
+						.user_type(UserType.FLEXTALK_ID)
+						.build();
 		//Then
 		assertNotNull(user);
 	}
@@ -80,40 +77,41 @@ public class UserControllerTests {
 	public void TestRegExpUser() {
 
 		//Given
-		User user = new User();
-		user.setUserKey(10L);
-		user.setUserId("test");
-		user.setUserPw("1!2sda3c4d");
-		user.setUserEmail("eedys123@naver.com");
-		user.setUserType(UserType.FLEXTALK_ID);
+		User user = User.builder()
+						.user_key(10L)
+						.user_id("test1")
+						.user_pw("1!2sda3c4d")
+						.user_email("eedys123@naver.com")
+						.user_type(UserType.FLEXTALK_ID)
+						.build();
 
 		//Then
-		assertTrue(patternChecker.valid(RegExp.ID_REGEXP, user.getUserId()));
-		assertTrue(patternChecker.valid(RegExp.PW_REGEXP, user.getUserPw()));
-		assertTrue(patternChecker.valid(RegExp.EMAIL_REGEXP, user.getUserEmail()));
+		assertTrue(patternChecker.valid(RegExp.ID_REGEXP, user.getUser_id()));
+		assertTrue(patternChecker.valid(RegExp.PW_REGEXP, user.getUser_pw()));
+		assertTrue(patternChecker.valid(RegExp.EMAIL_REGEXP, user.getUser_email()));
 
 		//Given
-		user.setUserId("te");
-		user.setUserPw("1234");
-		user.setUserEmail("eedys123@naver.ntewcomw");
+		user.setUser_id("te");
+		user.setUser_pw("!1");
+		user.setUser_email("eedys123@naver.ntewcomw");
 
 		//Then
-		assertFalse(patternChecker.valid(RegExp.ID_REGEXP, user.getUserId()));
-		assertFalse(patternChecker.valid(RegExp.PW_REGEXP, user.getUserPw()));
-		assertFalse(patternChecker.valid(RegExp.EMAIL_REGEXP, user.getUserEmail()));
+		assertFalse(patternChecker.valid(RegExp.ID_REGEXP, user.getUser_id()));
+		assertFalse(patternChecker.valid(RegExp.PW_REGEXP, user.getUser_pw()));
+		assertFalse(patternChecker.valid(RegExp.EMAIL_REGEXP, user.getUser_email()));
 
 	}
 
-	@Test
+//	@Test
 	@TestDescripter("사용자 생성 API 성공 테스트")
 	public void User_Created() throws Exception {
 
 		//Given
 		UserVO.enrollmentRequest user = new UserVO.enrollmentRequest();
-		user.setUserId("test");
-		user.setUserPw("bool!7922");
-		user.setUserType("0");
-		user.setUserEmail("eedys123@naver.com");
+		user.setUser_id("test");
+		user.setUser_pw("1!2sda3c4d");
+		user.setUser_type("0");
+		user.setUser_email("eedys123@naver.com");
 
 		//Then
 		mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/enrollment")
@@ -123,7 +121,7 @@ public class UserControllerTests {
 		.andDo(print())
 		.andExpect(status().isCreated())
 		.andExpect(jsonPath("$.status").value(201))
-		.andExpect(jsonPath("$.body.enrollYN").value(1));				
+		.andExpect(jsonPath("$.body.enroll_YN").value(1));				
 	}
 	
 	
@@ -133,10 +131,10 @@ public class UserControllerTests {
 
 		//Given
 		UserVO.enrollmentRequest user = new UserVO.enrollmentRequest();
-		user.setUserId("te");
-		user.setUserPw("1234");
-		user.setUserType("0");
-		user.setUserEmail("eedys123@naver.ntewcomw3");
+		user.setUser_id("te");
+		user.setUser_pw("1234");
+		user.setUser_type("0");
+		user.setUser_email("eedys123@naver.ntewcomw3");
 
 		//Then
 		mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/enrollment")
@@ -148,14 +146,15 @@ public class UserControllerTests {
 		.andExpect(jsonPath("$.status").value(400));
 	}
 	
-//	@Test
+	@Test
 	@TestDescripter("사용자 로그인 API 성공 테스트")
 	public void User_Login_OK() throws Exception {
 		
 		//Given
-		User user = new User();
-		user.setUserId("test");
-		user.setUserPw("bool!7922");
+		User user = User.builder()
+						.user_id("test")
+						.user_pw("1!2sda3c4d")
+						.build();
 		
 		//Then
 		mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/login")
@@ -165,7 +164,7 @@ public class UserControllerTests {
 		.andDo(print())
 		.andExpect(status().isOk())
 		.andExpect(jsonPath("$.status").value(200))
-		.andExpect(jsonPath("$.body.loginYN").value(1));		
+		.andExpect(jsonPath("$.body.login_YN").value(1));		
 	}
 	
 	@Test
@@ -174,8 +173,8 @@ public class UserControllerTests {
 		
 		//Given
 		User user = User.builder()
-				.userId("")
-				.userPw("")
+				.user_id("test")
+				.user_pw("!1")
 				.build();
 
 		//Then
@@ -197,7 +196,7 @@ public class UserControllerTests {
 				.accept(MediaType.APPLICATION_JSON_UTF8_VALUE))
 		.andDo(print())
 		.andExpect(status().isOk())
-		.andExpect(jsonPath("$.body.overlapYN").value(1));
+		.andExpect(jsonPath("$.body.overlap_YN").value(1));
 	}
 	
 }
