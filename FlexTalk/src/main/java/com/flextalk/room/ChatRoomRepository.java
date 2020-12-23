@@ -16,6 +16,9 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
 			+ "ON chat.chatroom_key = part.room.chatroom_key "
 			+ "WHERE part.user.user_key = :user_key "
 			+ "ORDER BY chat.reg_date DESC")
-	public List<Object[]> findRooms(@Param("user_key") long user_key, Pageable pageable);
+	public List<Object[]> findChatRooms(@Param("user_key") long user_key, Pageable pageable);
 
+	
+	@Query("SELECT chat FROM ChatRoom chat WHERE chat.chatroom_key = :chatroom_key")
+	public ChatRoom findByChatRoom(@Param("chatroom_key") long chatroom_key);
 }

@@ -18,4 +18,5 @@
 	</bean>
 	
 	<tx:advice id="txAdvice" transaction-manager="transactionManager"></tx:advice>
+	<tx:annotation-driven/>
 </beans>

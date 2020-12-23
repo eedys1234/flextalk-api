@@ -34,7 +34,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 	private final ParticipantRepository participantRepository;
 	
 	@Override
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	public ChatRoomVO.createResponse create(long user_key, ChatRoom chatRoom) {
 		
 		//사용자 정보 가져오기 
@@ -53,11 +53,11 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 	}
 
 	@Override
-	@Transactional(readOnly = true)
+	@Transactional(readOnly = true, rollbackFor = Exception.class)
 	public List<ChatRoomVO.chatRoomInfo> findRooms(long userKey, int pageNo, int size) {
 		
 		Pageable pageable = new PageRequest(pageNo - 1, size);
-		List<Object[]> chatRooms = chatRoomRepository.findRooms(userKey, pageable);
+		List<Object[]> chatRooms = chatRoomRepository.findChatRooms(userKey, pageable);
 		List<ChatRoomVO.chatRoomInfo> NewChatRooms = new ArrayList<>();
 		for(Object[] roomInfo : chatRooms) {
 			NewChatRooms.add(
@@ -77,7 +77,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 	}
 
 	@Override
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	public int remove(long userKey, long chatroomKey) {
 		
 		chatRoomRepository.delete(chatroomKey);

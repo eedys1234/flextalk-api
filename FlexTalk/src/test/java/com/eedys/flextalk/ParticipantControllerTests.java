@@ -1,7 +1,10 @@
 package com.eedys.flextalk;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -21,6 +24,7 @@ import com.flextalk.common.TestDescripter;
 import com.flextalk.exception.ExceptionAdvice;
 import com.flextalk.participant.ParticipantController;
 import com.flextalk.participant.ParticipantVO;
+import com.sun.xml.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
 @WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -49,13 +53,14 @@ public class ParticipantControllerTests {
 	
 	@Test
 	@TestDescripter("참여자 초대 API 성공 테스트")
-	public void Participant_Visit_OK() throws Exception {
+	public void Participant_Invite_OK() throws Exception {
 		
-		long[] user_keys = new long[2];
+		long[] user_keys = {2L};
+		long chatroom_key = 33L;
 		
-		ParticipantVO.visitRequest request = ParticipantVO.visitRequest.builder()
-																		.user_keys(user_keys)
-																		.chatroom_key(1)
+		ParticipantVO.inviteRequest request = ParticipantVO.inviteRequest.builder()
+																		.user_keys(Arrays.stream(user_keys).boxed().collect(Collectors.toList()))
+																		.chatroom_key(chatroom_key)
 																		.build();
 		
 		mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/participant")
@@ -63,7 +68,7 @@ public class ParticipantControllerTests {
 				.accept(MediaType.APPLICATION_JSON_UTF8_VALUE)
 				.content(objectMapper.writeValueAsString(request)))
 		.andDo(print())
-		.andExpect(status().isOk())
+		.andExpect(status().isCreated())
 		;
 		
 	}

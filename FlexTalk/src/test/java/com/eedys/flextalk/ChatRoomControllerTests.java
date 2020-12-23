@@ -75,7 +75,7 @@ public class ChatRoomControllerTests {
 		assertNotNull(room);
 	}
 	
-//	@Test
+	@Test
 	@TestDescripter("채팅방 생성 API 성공 테스트")
 	public void ChatRoom_Created() throws Exception {
 		
@@ -142,7 +142,7 @@ public class ChatRoomControllerTests {
 		
 	}
 	
-	@Test
+//	@Test
 	@TestDescripter("채팅방 나가기 API 성공 테스트")
 	public void ChatRoom_Leave_OK() throws Exception {
 		
